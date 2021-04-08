@@ -9,5 +9,9 @@ RUN yarn install
 COPY . .
 
 EXPOSE 8080
-RUN yarn build 
+
+RUN yarn build
+
+VOLUME /usr/src/app
+
 CMD ["node", "dist/main"]
