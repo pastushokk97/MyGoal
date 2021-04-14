@@ -1,46 +1,57 @@
-import { Column, Entity, PrimaryGeneratedColumn } from 'typeorm';
+import {
+  Column,
+  Entity,
+  JoinColumn,
+  OneToOne,
+  PrimaryGeneratedColumn
+} from 'typeorm';
+import { Results } from '../app-constants/enums';
+import { CompetitionEntity } from './Competition.entity';
+import { UserEntity } from './User.entity';
 
 @Entity({
-    name: 'bets',
+  name: 'bets',
 })
 export class BetEntity {
     @PrimaryGeneratedColumn('uuid', {
-        name: 'bet_id'
+      name: 'bet_id'
     })
     public betId: string;
 
-    @Column({
-        type: 'uuid',
-        name: 'userId',
-        nullable: false
+    @OneToOne(() => UserEntity, user => user.userId, {
+      onDelete: 'CASCADE'
     })
-    public userId: string;
+    @JoinColumn({
+      name: 'user_id'
+    })
+    public userId: UserEntity;
+
+    @OneToOne(() => CompetitionEntity,
+      competition => competition.competitionId, {
+        onDelete: 'CASCADE'
+      })
+    @JoinColumn({
+      name: 'competition_id'
+    })
+    public competitionId: CompetitionEntity;
 
     @Column({
-        type: 'uuid',
-        name: 'competition_id',
-        nullable: false
+      type: 'varchar',
+      name: 'result',
+      enum: Results
     })
-    public competitionId: string;
+    public result: Results;
 
     @Column({
-        type: 'varchar',
-        length: '10',
-        name: 'result',
-        nullable: false
-    })
-    public result: string;
-
-    @Column({
-        type: 'date',
-        name: 'created_at',
-        nullable: false
+      type: 'date',
+      name: 'created_at',
+      nullable: false
     })
     public createdAt: Date;
 
     @Column({
-        type: 'date',
-        name: 'updated_at',
+      type: 'date',
+      name: 'updated_at',
     })
     public updatedAt: Date;
 }
