@@ -14,4 +14,4 @@ RUN yarn build
 
 VOLUME /usr/src/app
 
-CMD ["node", "dist/main"]
+CMD ["yarn", "start:prod"]
