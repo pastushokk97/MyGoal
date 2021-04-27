@@ -2,12 +2,14 @@ FROM node:12
 
 WORKDIR /usr/src/app
 
-COPY package*.json ./
+COPY . .
 
 RUN yarn install
 
-COPY . .
-
 EXPOSE 8080
-RUN yarn build 
-CMD ["node", "dist/main"]
+
+RUN yarn build
+
+VOLUME /usr/src/app
+
+CMD ["yarn", "start:prod"]
