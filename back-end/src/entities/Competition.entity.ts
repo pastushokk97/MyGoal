@@ -4,7 +4,7 @@ import { Results } from '../app-constants/enums';
 @Entity({
   name: 'competitions',
 })
-export class CompetitionEntity {
+export class Competition {
     @PrimaryGeneratedColumn('uuid', {
       name: 'competition_id'
     })

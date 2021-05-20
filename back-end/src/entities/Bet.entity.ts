@@ -6,34 +6,34 @@ import {
   PrimaryGeneratedColumn
 } from 'typeorm';
 import { Results } from '../app-constants/enums';
-import { CompetitionEntity } from './Competition.entity';
-import { UserEntity } from './User.entity';
+import { Competition } from './Competition.entity';
+import { User } from './User.entity';
 
 @Entity({
   name: 'bets',
 })
-export class BetEntity {
+export class Bet {
     @PrimaryGeneratedColumn('uuid', {
       name: 'bet_id'
     })
     public betId: string;
 
-    @OneToMany(() => UserEntity, user => user.userId, {
+    @OneToMany(() => User, user => user.userId, {
       onDelete: 'CASCADE'
     })
     @JoinColumn({
       name: 'user_id'
     })
-    public userId: UserEntity;
+    public userId: User;
 
-    @OneToMany(() => CompetitionEntity,
+    @OneToMany(() => Competition,
       competition => competition.competitionId, {
         onDelete: 'CASCADE'
       })
     @JoinColumn({
       name: 'competition_id'
     })
-    public competitionId: CompetitionEntity;
+    public competitionId: Competition;
 
     @Column({
       type: 'varchar',
