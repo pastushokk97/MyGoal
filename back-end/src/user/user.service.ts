@@ -43,16 +43,17 @@ export class UserService {
     const hash = await this.hashPassword(user.password);
 
     if(userInDB.password !== hash) throw new ForbiddenException('Password doesn\'t match');
-
+    
     return {
-      user: userInDB.email,
+      email: userInDB.email,
       countryCode: userInDB.countryCode,
     }
   }
   async getInfo(email: string) {
     const user = await this.findOne(email);
+
     return {
-        user: user.email,
+        email: user.email,
         countryCode: user.countryCode,
       }
   }
@@ -62,13 +63,17 @@ export class UserService {
 
     return this.userRepository.createQueryBuilder()
     .update(User)
-    .set({ ...user })
+    .set({ 
+        countryCode: user.countryCode,
+        password: user.password
+      })
     .where({ email: user.email })
     .execute();
   }
 
   async deleteUser(email: string) {
-    return await this.userRepository.delete({ email })
+    const deleteUser = await this.userRepository.delete({ email })
+    return deleteUser.affected === 1 ? true : false;
   }
 
   async findOne(email: string) {

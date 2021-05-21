@@ -30,8 +30,10 @@ export class UserController {
   }
 
   @Delete()
-  deleteUser(@Body() body: { email : string }) {
+  async deleteUser(@Body() body: { email : string }) {
     const { email } = body;
-    return this.userService.deleteUser(email);
+    return {
+      delete : await this.userService.deleteUser(email)
+    };
   }
 }
