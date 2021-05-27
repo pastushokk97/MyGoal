@@ -38,7 +38,7 @@ describe('User', () => {
   });
 
   afterEach(async () => {
-    await userRepository.query(`DELETE FROM users;`);
+    await userRepository.query('DELETE FROM users;');
   });
 
   afterAll(async () => {
@@ -50,15 +50,15 @@ describe('User', () => {
       const { status, body } = await request(app.getHttpServer())
         .post('/user/register')
         .send(users[0])
-        .set('Accept', 'application/json')
+        .set('Accept', 'application/json');
 
-        const userDB = await userRepository.findOne({ email:users[0].email })
-        //TODO: fix status
-        expect(status).toStrictEqual(201);
-        expect(body.email).toStrictEqual(userDB.email);
-        expect(body.countryCode).toStrictEqual(userDB.countryCode);
-        expect(body.password).not.toStrictEqual(users[0].password);
-        expect(body.password).toStrictEqual(userDB.password);
+      const userDB = await userRepository.findOne({ email: users[0].email });
+
+      expect(status).toStrictEqual(200);
+      expect(body.email).toStrictEqual(userDB.email);
+      expect(body.countryCode).toStrictEqual(userDB.countryCode);
+      expect(body.password).not.toStrictEqual(users[0].password);
+      expect(body.password).toStrictEqual(userDB.password);
     });
     it('should login user', async () => {
       await userService.registerUser(users[1]);
@@ -69,11 +69,11 @@ describe('User', () => {
           email: users[1].email,
           password: users[1].password
         })
-        .set('Accept', 'application/json')
+        .set('Accept', 'application/json');
 
-        expect(status).toStrictEqual(201);
-        expect(body.email).toStrictEqual(users[1].email);
-        expect(body.countryCode).toStrictEqual(users[1].countryCode);
+      expect(status).toStrictEqual(200);
+      expect(body.email).toStrictEqual(users[1].email);
+      expect(body.countryCode).toStrictEqual(users[1].countryCode);
     });
     it('should return data about user', async () => {
       await userService.registerUser(users[2]);
@@ -81,30 +81,31 @@ describe('User', () => {
       const { status, body } = await request(app.getHttpServer())
         .get('/user/get-info')
         .send({ email: users[2].email })
-        .set('Accept', 'application/json')
+        .set('Accept', 'application/json');
 
-        expect(status).toStrictEqual(200);
-        expect(body.email).toStrictEqual(users[2].email);
-        expect(body.countryCode).toStrictEqual(users[2].countryCode);
+      expect(status).toStrictEqual(200);
+      expect(body.email).toStrictEqual(users[2].email);
+      expect(body.countryCode).toStrictEqual(users[2].countryCode);
     });
-    it.only('should update user', async () => {
+    it('should update user', async () => {
       await userService.registerUser(users[3]);
 
       const updatedUser = {
+        email: users[3].email,
         countryCode: '4',
         password: 'password'
       };
 
-      const { status, body } = await request(app.getHttpServer())
+      const { status } = await request(app.getHttpServer())
         .patch('/user')
         .send(updatedUser)
-        .set('Accept', 'application/json')
+        .set('Accept', 'application/json');
 
-        const userDB = await userRepository.findOne({ email:users[3].email })
+      const userDB = await userRepository.findOne({ email: users[3].email });
 
-        expect(status).toStrictEqual(200);
-        expect(userDB.countryCode).toStrictEqual(updatedUser.countryCode);
-        expect(userDB.password).not.toBe(updatedUser.password);
+      expect(status).toStrictEqual(200);
+      expect(userDB.countryCode).toStrictEqual(updatedUser.countryCode);
+      expect(userDB.password).not.toBe(updatedUser.password);
     });
     it('should delete user', async () => {
       await userService.registerUser(users[4]);
@@ -112,13 +113,13 @@ describe('User', () => {
       const { status, body } = await request(app.getHttpServer())
         .delete('/user')
         .send({ email: users[4].email })
-        .set('Accept', 'application/json')
+        .set('Accept', 'application/json');
 
-        const userDB = await userRepository.findOne({ email:users[4].email })
+      const userDB = await userRepository.findOne({ email: users[4].email });
 
-        expect(status).toStrictEqual(200);
-        expect(body.delete).toStrictEqual(true);
-        expect(userDB).toBe(undefined);
+      expect(status).toStrictEqual(200);
+      expect(body.delete).toStrictEqual(true);
+      expect(userDB).toBe(undefined);
     });
   });
 });

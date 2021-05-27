@@ -1,5 +1,15 @@
-import { Body, Controller, Delete, Get, Patch, Post } from '@nestjs/common';
-import { LoginDTO, UserDTO, UpdateUserDTO } from './dto/user.dto';
+import {
+  Body,
+  Controller,
+  Delete,
+  Get,
+  Patch,
+  Post,
+  Res,
+  HttpStatus
+} from '@nestjs/common';
+import { Response } from 'express';
+import { LoginDTO, UserDTO, UpdateUserDTO, EmailDTO } from './dto/user.dto';
 import { UserService } from './user.service';
 
 
@@ -9,31 +19,43 @@ export class UserController {
   }
 
   @Get('get-info')
-  getInfo(@Body() body: { email : string }) {
+  async getInfo(@Body() body: EmailDTO, @Res() res: Response) {
     const { email } = body;
-    return this.userService.getInfo(email);
+    const information = await this.userService.getInfo(email);
+
+    return information ?
+      res.status(HttpStatus.OK).json(information) :
+      res.status(HttpStatus.NOT_FOUND);
   }
 
   @Post('register')
-  register(@Body() user: UserDTO) {
-    return this.userService.registerUser(user);
+  async register(@Body() body: UserDTO, @Res() res: Response) {
+    const user = await this.userService.registerUser(body);
+
+    return res.status(HttpStatus.OK).json(user);
   }
 
   @Post('login')
-  login(@Body() user: LoginDTO) {
-    return this.userService.login(user);
+  async login(@Body() body: LoginDTO, @Res() res: Response) {
+    const user = await this.userService.login(body);
+
+    return res.status(HttpStatus.OK).json(user);
   }
 
   @Patch()
-  updateUser(@Body() user: UpdateUserDTO) {
-    return this.userService.updateUser(user);
+  async updateUser(@Body() body: UpdateUserDTO, @Res() res: Response) {
+    const updatedUser = this.userService.updateUser(body);
+
+    return res.status(HttpStatus.OK).json(updatedUser);
   }
 
   @Delete()
-  async deleteUser(@Body() body: { email : string }) {
+  async deleteUser(@Body() body: EmailDTO, @Res() res: Response) {
     const { email } = body;
-    return {
-      delete : await this.userService.deleteUser(email)
-    };
+    const deletedUser = await this.userService.deleteUser(email);
+
+    return deletedUser ?
+      res.status(HttpStatus.OK).json(deletedUser) :
+      res.status(HttpStatus.NOT_FOUND);
   }
 }
