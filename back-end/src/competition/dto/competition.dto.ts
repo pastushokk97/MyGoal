@@ -21,7 +21,7 @@ export class CompetitionDTO {
     @IsNotEmpty()
     teamOutside: string;
 
-    @IsDate()
+    @IsString   ()
     @IsOptional()
     competitionDate: Date;
 
@@ -56,6 +56,6 @@ export class UpdateCompetitionDTO {
 
 export class IdDTO {
     @IsNotEmpty()
-    @IsUUID('4', {always: true})
+    @IsUUID(4)
     competitionId: string;
 }

@@ -25,7 +25,6 @@ export class CompetitionController {
 
   @Get()
   async getInfo(@Query() query: IdDTO, @Res() res: Response) {
-    // doesn't work for random string
     const information = await this.competitionService.getInfo(
       query.competitionId
     );
@@ -62,6 +61,7 @@ export class CompetitionController {
   @Delete()
   async deleteCompetition(@Body() body: IdDTO, @Res() res: Response) {
     const { competitionId } = body;
+    
     const deleted = await this.competitionService.deleteCompetition(
       competitionId
     );

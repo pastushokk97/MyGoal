@@ -23,7 +23,6 @@ export class CompetitonService {
   ) {}
 
   async registerCompetition(competition: ICompetition): Promise<Competition> {
-
     const isExist = await this.competitionRepository.findOne({
       sport: competition.sport,
       teamAtHome: competition.teamAtHome,
