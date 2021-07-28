@@ -104,7 +104,7 @@ describe('Competition', () => {
         .set('Accept', 'application/json');
 
       const competition = await competitionRepository.findOne({ competitionId });
-
+  
       expect(status).toStrictEqual(200);
       expect(competition).toBe(undefined);
     });

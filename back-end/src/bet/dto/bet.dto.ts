@@ -1,7 +1,7 @@
 import { IsEnum, IsNotEmpty, IsOptional, IsUUID } from 'class-validator';
-import { Results } from 'src/app-constants/enums';
-import { Competition } from 'src/entities/Competition.entity';
-import { User } from 'src/entities/User.entity';
+import { Results } from '../../app-constants/enums';
+import { Competition } from '../../entities/Competition.entity';
+import { User } from '../../entities/User.entity';
 
 export class IdDTO {
     @IsNotEmpty()

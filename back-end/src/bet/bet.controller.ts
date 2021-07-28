@@ -22,8 +22,8 @@ export class BetController {
       const remove = await this.betService.deleteBet(query.betId);
     
       return remove ?
-        res.status(HttpStatus.OK) :
-        res.status(HttpStatus.NOT_FOUND);
+        res.status(HttpStatus.OK).json(remove) :
+        res.status(HttpStatus.NOT_FOUND).json(remove);
     }
 
     @Post()

@@ -2,7 +2,7 @@ import {
   Column,
   Entity,
   JoinColumn,
-  OneToMany,
+  ManyToOne,
   PrimaryGeneratedColumn
 } from 'typeorm';
 import { Results } from '../app-constants/enums';
@@ -18,7 +18,7 @@ export class Bet {
     })
     public betId: string;
 
-    @OneToMany(() => User, user => user.userId, {
+    @ManyToOne(() => User, user => user.userId, {
       onDelete: 'CASCADE'
     })
     @JoinColumn({
@@ -26,7 +26,7 @@ export class Bet {
     })
     public userId: User;
 
-    @OneToMany(() => Competition,
+    @ManyToOne(() => Competition,
       competition => competition.competitionId, {
         onDelete: 'CASCADE'
       })

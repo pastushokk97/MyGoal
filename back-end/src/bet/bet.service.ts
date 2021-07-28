@@ -26,7 +26,7 @@ export class BetService {
 
   async registerBet(bet: IBet): Promise<Bet> {
     console.log(1);
-    const isExist = await this.BetRepository.findOne({
+    const isExist = await this.BetRepository.findOneOrFail({
       userId: bet.userId,
       competitionId: bet.competitionId
     });
@@ -34,7 +34,7 @@ export class BetService {
     if (isExist) {
       throw new UnauthorizedException('This bet is already exists');
     }
-    console.log(1);
+
     return this.BetRepository.save(bet);
   }
 

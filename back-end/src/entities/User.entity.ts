@@ -1,4 +1,5 @@
-import { Column, Entity, PrimaryGeneratedColumn } from 'typeorm';
+import { Column, Entity, OneToMany, PrimaryGeneratedColumn } from 'typeorm';
+import { Bet } from './Bet.entity';
 
 @Entity({
   name: 'users',
@@ -45,4 +46,7 @@ export class User {
       name: 'updated_at'
     })
     public updatedAt: Date;
+
+    @OneToMany(() => Bet, bet => bet.userId)
+    public bets: Bet[]
 }

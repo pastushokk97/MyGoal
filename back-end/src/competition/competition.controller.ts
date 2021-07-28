@@ -61,13 +61,13 @@ export class CompetitionController {
   @Delete()
   async deleteCompetition(@Body() body: IdDTO, @Res() res: Response) {
     const { competitionId } = body;
-    
+
     const deleted = await this.competitionService.deleteCompetition(
       competitionId
     );
 
     return deleted ?
-      res.status(HttpStatus.OK) :
+      res.status(HttpStatus.OK).json() :
       res.status(HttpStatus.NOT_FOUND);
   }
 }

@@ -1,5 +1,6 @@
-import { Column, Entity, PrimaryGeneratedColumn } from 'typeorm';
+import { Column, Entity, OneToMany, PrimaryGeneratedColumn } from 'typeorm';
 import { Results } from '../app-constants/enums';
+import { Bet } from './Bet.entity';
 
 @Entity({
   name: 'competitions',
@@ -47,4 +48,7 @@ export class Competition {
       enum: Results
     })
     public result: Results;
+
+    @OneToMany(() => Bet, bet => bet.competitionId)
+    public bets: Bet[]
 }
