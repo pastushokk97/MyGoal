@@ -1,0 +1,66 @@
+export const competitions = [
+  {
+    sport: 'football',
+    teamAtHome: 'Granada',
+    teamOutside: 'Real Madrid',
+    competitionDate: new Date(2021, 4, 13, 23),
+  },
+  {
+    sport: 'basketball',
+    teamAtHome: 'LA Laikers',
+    teamOutside: 'Huston Rockets',
+    result: 'home_win',
+    competitionDate: new Date(2021, 4, 13, 2),
+  },
+  {
+    sport: 'volleyball',
+    teamAtHome: 'Austria',
+    teamOutside: 'Spain',
+    competitionDate: new Date(2021, 4, 13, 18, 35),
+  },
+  {
+    sport: 'football',
+    teamAtHome: 'Aston Villa',
+    teamOutside: 'Everton',
+    competitionDate: new Date(2021, 4, 13, 20),
+  },
+  {
+    sport: 'basketball',
+    teamAtHome: 'Atlanta Hocks',
+    teamOutside: 'Washington Wizards',
+    result: 'home_win',
+    competitionDate: new Date(2021, 4, 13, 5, 30),
+  },
+  {
+    sport: 'volleyball',
+    teamAtHome: 'Switzerland',
+    teamOutside: 'Belarus',
+    result: 'outside_win',
+    competitionDate: new Date(2021, 4, 13, 18),
+  },
+  {
+    sport: 'football',
+    teamAtHome: 'Man Utd',
+    teamOutside: 'Leister',
+    result: 'outside_win',
+    competitionDate: new Date(2021, 4, 9, 20),
+  },
+  {
+    sport: 'football',
+    teamAtHome: 'Man Utd',
+    teamOutside: 'Liverpool',
+    competitionDate: new Date(2021, 4, 13, 22, 15),
+  },
+  {
+    sport: 'hokey',
+    teamAtHome: 'Colorado',
+    teamOutside: 'Los-Angeles',
+    competitionDate: new Date(2021, 4, 13, 4),
+  },
+  {
+    sport: 'hokey',
+    teamAtHome: 'Calgvary',
+    teamOutside: 'Vancouver',
+    competitionDate: new Date(2021, 4, 13, 4),
+  },
+];

@@ -4,7 +4,7 @@ module.exports = {
   port: process.env.DB_PORT,
   username: process.env.DB_USERNAME,
   password: process.env.NODE_ENV === 'test' ? process.env.DB_PASSWORD_LOCALHOST : process.env.DB_PASSWORD_PROD,
-  database: process.env.DB,
+  database: process.env.DB_DATABASE,
   synchronize: false,
   logging: true,
   schema: 'public',

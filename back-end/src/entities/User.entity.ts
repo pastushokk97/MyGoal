@@ -1,9 +1,10 @@
-import { Column, Entity, PrimaryGeneratedColumn } from 'typeorm';
+import { Column, Entity, OneToMany, PrimaryGeneratedColumn } from 'typeorm';
+import { Bet } from './Bet.entity';
 
 @Entity({
   name: 'users',
 })
-export class UserEntity {
+export class User {
     @PrimaryGeneratedColumn('uuid', {
       name: 'user_id'
     })
@@ -45,4 +46,7 @@ export class UserEntity {
       name: 'updated_at'
     })
     public updatedAt: Date;
+
+    @OneToMany(() => Bet, bet => bet.userId)
+    public bets: Bet[]
 }

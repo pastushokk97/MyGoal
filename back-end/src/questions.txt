@@ -1,4 +1,0 @@
-Why my changes doesn't work? Do I need every time build an app or recreate all containers and images?
-Caching in docker is good? Or we need to clear it?
-Multistage Builds is it useful?
-An alpine image, is it cool to use? In this case, we save our memory?
