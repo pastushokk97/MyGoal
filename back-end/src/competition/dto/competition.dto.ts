@@ -21,7 +21,7 @@ export class CompetitionDTO {
     @IsNotEmpty()
     teamOutside: string;
 
-    @IsString   ()
+    @IsString()
     @IsOptional()
     competitionDate: Date;
 

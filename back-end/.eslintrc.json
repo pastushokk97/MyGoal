@@ -126,12 +126,6 @@
         "checkLoops": false
       }
     ],
-    "no-use-before-define": [
-      "error",
-      {
-        "functions": false
-      }
-    ],
     "arrow-spacing": [
       "error"
     ],

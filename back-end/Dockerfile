@@ -1,4 +1,4 @@
-FROM node:12
+FROM node:14
 
 WORKDIR /usr/src/app
 
@@ -10,6 +10,9 @@ EXPOSE 8080
 
 RUN yarn build
 
-VOLUME /usr/src/app
+RUN mkdir "/uploadData" && mkdir "/uploadData/input"
 
-CMD ["yarn", "start:prod"]
+VOLUME /usr/src/app
+VOLUME /uploadData
+
+CMD ["yarn", "start:dev"]

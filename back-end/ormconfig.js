@@ -1,9 +1,9 @@
 module.exports = {
   type: 'postgres',
-  host: process.env.NODE_ENV === 'test' ? process.env.DB_HOST_LOCALHOST : process.env.DB_HOST_PROD,
+  host:  process.env.DB_HOST,
   port: process.env.DB_PORT,
   username: process.env.DB_USERNAME,
-  password: process.env.NODE_ENV === 'test' ? process.env.DB_PASSWORD_LOCALHOST : process.env.DB_PASSWORD_PROD,
+  password: process.env.DB_PASSWORD,
   database: process.env.DB_DATABASE,
   synchronize: false,
   logging: true,
@@ -12,10 +12,10 @@ module.exports = {
     'dist/**/*.entity{.js,.ts}'
   ],
   migrations: [
-    'dist/db/migration/*.js'
+    'dist/src/db/migration/*.js'
   ],
   cli: {
     entitiesDir: './src/entities',
     migrationsDir: './src/db/migration'
   }
-}
+};

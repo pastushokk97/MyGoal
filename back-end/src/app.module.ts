@@ -3,7 +3,9 @@ import { ConfigModule } from '@nestjs/config';
 import { TypeOrmModule } from '@nestjs/typeorm';
 import { UserModule } from './user/user.module';
 import { CompetitionModule } from './competition/competition.module';
-import { BetModule } from './bet/bet.module'
+import { BetModule } from './bet/bet.module';
+import { UploadDataModule } from './uploadData/uploadData.module';
+import { MulterModule } from '@nestjs/platform-express';
 
 @Module({
   imports: [
@@ -12,6 +14,7 @@ import { BetModule } from './bet/bet.module'
     UserModule,
     CompetitionModule,
     BetModule,
+    UploadDataModule,
   ],
   controllers: [],
   providers: [],

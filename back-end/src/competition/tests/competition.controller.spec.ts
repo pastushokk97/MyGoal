@@ -8,7 +8,7 @@ import { Competition } from '../../entities/Competition.entity';
 import { CompetitionModule } from '../competition.module';
 import { competitions } from '../../fixtures/competitions';
 import { CompetitonService } from '../competition.service';
-import { Results } from "../../app-constants/enums"
+import { Results } from '../../app-constants/enums';
 
 describe('Competition', () => {
   let app: INestApplication;
@@ -53,7 +53,8 @@ describe('Competition', () => {
         .send(competitions[0])
         .set('Accept', 'application/json');
 
-      const competition = await competitionRepository.findOne(body.competitionId);
+      const competition =
+        await competitionRepository.findOne(body.competitionId);
 
       expect(status).toStrictEqual(200);
       expect(body.sport).toStrictEqual(competition.sport);
@@ -62,12 +63,12 @@ describe('Competition', () => {
     });
     it('should return data about competition', async () => {
       const { competitionId } = await competitonService.registerCompetition({
-          ...competitions[2],
-          result: Results.homeWin
+        ...competitions[2],
+        result: Results.homeWin
       });
 
       const { status, body } = await request(app.getHttpServer())
-        .get(`/competition`)
+        .get('/competition')
         .query({ competitionId })
         .set('Accept', 'application/json');
 
@@ -78,7 +79,10 @@ describe('Competition', () => {
       expect(body.result).toStrictEqual(Results.homeWin);
     });
     it('should update competition', async () => {
-        const { competitionId } = await competitonService.registerCompetition({ ...competitions[3], result: Results.technicalDefeat});
+      const { competitionId } =
+        await competitonService.registerCompetition({
+          ...competitions[3], result: Results.technicalDefeat
+        });
 
       const updatedCompetiton = {
         result: Results.homeWin
@@ -89,22 +93,27 @@ describe('Competition', () => {
         .send(updatedCompetiton)
         .set('Accept', 'application/json');
 
-      const competition = await competitionRepository.findOne({ competitionId });
+      const competition =
+        await competitionRepository.findOne({ competitionId });
 
       expect(status).toStrictEqual(200);
       expect(competition.result).toStrictEqual(updatedCompetiton.result);
       expect(competition.competitionId).toStrictEqual(competitionId);
     });
     it('should delete competition', async () => {
-      const { competitionId } = await competitonService.registerCompetition({ ...competitions[3], result: Results.draw});
+      const { competitionId } =
+        await competitonService.registerCompetition({
+          ...competitions[3], result: Results.draw
+        });
 
       const { status } = await request(app.getHttpServer())
         .delete('/competition')
         .send({ competitionId })
         .set('Accept', 'application/json');
 
-      const competition = await competitionRepository.findOne({ competitionId });
-  
+      const competition =
+        await competitionRepository.findOne({ competitionId });
+
       expect(status).toStrictEqual(200);
       expect(competition).toBe(undefined);
     });
