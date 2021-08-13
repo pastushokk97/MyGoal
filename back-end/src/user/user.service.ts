@@ -14,8 +14,16 @@ interface IUser {
   password: string;
 }
 
+export interface IUserService {
+  registerUser(user: IUser): Promise<User>;
+  login(user: Partial<IUser>);
+  getInfo(email: string);
+  updateUser(user: IUser);
+  deleteUser(email: string);
+}
+
 @Injectable()
-export class UserService {
+export class UserService implements IUserService {
   constructor(
     @InjectRepository(User)
     private userRepository: Repository<User>
@@ -26,7 +34,7 @@ export class UserService {
   }
 
   async registerUser(user: IUser): Promise<User> {
-
+    console.log(user.email, 'userService')
     const isRegistered = await this.userRepository.findOne({
       email: user.email
     });
@@ -35,7 +43,7 @@ export class UserService {
       throw new UnauthorizedException('This user is already exists');
     }
 
-    const hash = await this.hashPassword(user.password);
+    const hash = this.hashPassword(user.password);
 
     return this.userRepository.save({
       ...user,
@@ -48,7 +56,7 @@ export class UserService {
 
     if (!userInDB) throw new UnauthorizedException('User was not found');
 
-    const hash = await this.hashPassword(user.password);
+    const hash = this.hashPassword(user.password);
 
     if (userInDB.password !== hash) {
       throw new ForbiddenException('Password doesn\'t match');
@@ -75,7 +83,7 @@ export class UserService {
   }
 
   async updateUser(user: IUser) {
-    if (user.password) user.password = await this.hashPassword(user.password);
+    if (user.password) user.password = this.hashPassword(user.password);
 
     return this.userRepository.createQueryBuilder()
       .update(User)
@@ -95,7 +103,7 @@ export class UserService {
     };
   }
 
-  async findOne(email: string) {
+  private async findOne(email: string) {
     return await this.userRepository.findOne({ email });
   }
 }

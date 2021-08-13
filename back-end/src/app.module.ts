@@ -5,7 +5,6 @@ import { UserModule } from './user/user.module';
 import { CompetitionModule } from './competition/competition.module';
 import { BetModule } from './bet/bet.module';
 import { UploadDataModule } from './uploadData/uploadData.module';
-import { MulterModule } from '@nestjs/platform-express';
 
 @Module({
   imports: [

@@ -12,6 +12,7 @@ services:
             - shared_bridge
         volumes:
             - "./:/usr/src/app"
+            - "/uploadData:/uploadData"
     postgres:
         image: postgres
         container_name: pg_pet_project

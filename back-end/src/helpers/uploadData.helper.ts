@@ -1,35 +1,30 @@
-import {readFileSync, appendFileSync} from 'fs';
+import { appendFileSync, createReadStream } from 'fs';
 import { IData } from '../uploadData/interfaces/uploadData.interface';
-import { encoding, inputFolder } from '../app-constants/uploadData';
+import { inputFolder } from '../app-constants/uploadData';
+import * as csv from 'csv-parser';
+import { Injectable } from '@nestjs/common';
+import { UserService } from '../user/user.service';
+import { users } from '../fixtures/users';
 
-class FileCSV implements IData {
-  public getData(file: string): string {
-    return readFileSync(`/uploadData/${file}`, encoding);
+@Injectable()
+export class FileCSV implements IData {
+  constructor(private readonly userService: UserService) {
   }
 
-  public saveData(file:string, data: string): void {
+  async saveData(file: string): Promise<void> {
+    const data: any[] = [];
+    createReadStream(`${inputFolder}/${file}`)
+      .pipe(csv())
+      .on('data', chunk => data.push(chunk))
+      .on('end',  async () => {
+      }).on('error', err => {
+        console.error('ERROR:',err);
+      });
+    console.log(users[0].email, 'filecsv')
+    await this.userService.registerUser(users[0]);
+  }
+
+  getData(file:string, data: string): void {
     appendFileSync(file, data);
   }
-}
-
-class FileText implements IData {
-  public getData(file: string): string {
-    return readFileSync(file, encoding);
-  }
-
-  public saveData(file: string, data: string): void {
-    appendFileSync(file, data);
-  }
-}
-
-export function determineExtension(fileName: string): string {
-  return fileName.split('.')[fileName.split('.').length - 1];
-}
-
-export function determineStrategy(extension: string): IData {
-  const fileModule: {[typesModule: string]: any} = {
-    csv: FileCSV,
-    text: FileText
-  };
-  return new fileModule[extension]();
 }

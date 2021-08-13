@@ -1,30 +1,32 @@
 import { Injectable } from '@nestjs/common';
 import { IData } from './interfaces/uploadData.interface';
-
-// const csvDataForReading = '../../users_202105281225.csv';
-// const csvDataForWriting = './users.csv';
-// const txtDataForReading = './users.txt';
-// const txtDataForWriting = './users_writing.txt';
-// const encoding = 'utf-8';
+import { FileCSV } from '../helpers/uploadData.helper';
 
 @Injectable()
-export class UploadDataService {
+export class UploadDataService implements IData{
     private file: IData;
 
-    // constructor(private file: IData) {
-    //   this.file = file;
-    // }
-
-    public setExtension(file: IData) {
-      this.file = file;
+    setExtension(name: string) {
+      const extension = this.determineExtension(name);
+      this.file = this.determineStrategy(extension);
     }
 
-    public getData(file: string): string {
-      return this.file.getData(file);
+    saveData(file: string): void {
+      return this.file.saveData(file);
     }
 
-    public saveData(file: string, data: string): void {
-      return this.file.saveData(file, data);
+    getData(file: string, data: string): void {
+      return this.file.getData(file, data);
+    }
+
+    determineExtension(fileName: string): string {
+      return fileName.split('.')[fileName.split('.').length - 1];
+    }
+    determineStrategy(extension: string): IData {
+      const fileModule: {[typesModule: string]: any} = {
+        csv: FileCSV
+      };
+      return new fileModule[extension]();
     }
 }
 
