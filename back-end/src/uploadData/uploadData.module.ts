@@ -3,8 +3,8 @@ import { UploadDataController } from './uploadData.controller';
 import { UploadDataService } from './uploadData.service';
 import { MulterModule } from '@nestjs/platform-express';
 import { inputFolder } from '../app-constants/uploadData';
-import { FileCSV } from '../helpers/uploadData.helper';
 import { UserModule } from '../user/user.module';
+import { CsvService } from './CsvService.service';
 
 @Module({
   imports: [
@@ -14,6 +14,6 @@ import { UserModule } from '../user/user.module';
     UserModule
   ],
   controllers: [UploadDataController],
-  providers: [UploadDataService, FileCSV]
+  providers: [UploadDataService, CsvService]
 })
 export class UploadDataModule {}

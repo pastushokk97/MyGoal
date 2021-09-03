@@ -9,15 +9,15 @@ import { Bet } from '../entities/Bet.entity';
 import { User } from '../entities/User.entity';
 import { Competition } from '../entities/Competition.entity';
 
-  interface IBet {
-    userId: User;
-    competitionId: Competition;
-    result: Results;
-    createdAt?: Date;
-    updatedAt?: Date;
-  }
+interface IBet {
+  userId: User;
+  competitionId: Competition;
+  result: Results;
+  createdAt?: Date;
+  updatedAt?: Date;
+}
 
-  @Injectable()
+@Injectable()
 export class BetService {
   constructor(
       @InjectRepository(Bet)
@@ -25,8 +25,7 @@ export class BetService {
   ) {}
 
   async registerBet(bet: IBet): Promise<Bet> {
-    console.log(1);
-    const isExist = await this.BetRepository.findOneOrFail({
+    const isExist = await Bet.findOneOrFail({
       userId: bet.userId,
       competitionId: bet.competitionId
     });
@@ -35,7 +34,7 @@ export class BetService {
       throw new UnauthorizedException('This bet is already exists');
     }
 
-    return this.BetRepository.save(bet);
+    return Bet.save(Bet.create(bet));
   }
 
   async getInfo(betId: string) {
@@ -43,11 +42,12 @@ export class BetService {
   }
 
   async deleteBet(betId: string) {
-    const deleteBet = await this.BetRepository.delete({ betId });
+    const deleteBet = await Bet.delete({ betId });
+
     return deleteBet.affected === 1;
   }
 
   async findOne(betId: string) {
-    return await this.BetRepository.findOne({ betId });
+    return await Bet.findOne({ betId });
   }
 }

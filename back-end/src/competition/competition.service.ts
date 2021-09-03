@@ -16,14 +16,14 @@ interface ICompetition {
 }
 
 @Injectable()
-export class CompetitonService {
+export class CompetitionService {
   constructor(
     @InjectRepository(Competition)
     private competitionRepository: Repository<Competition>
   ) {}
 
-  async registerCompetition(competition: ICompetition): Promise<Competition> {
-    const isExist = await this.competitionRepository.findOne({
+  async registerCompetition(competition: ICompetition): Promise<Competition[]> {
+    const isExist = await Competition.findOne({
       sport: competition.sport,
       teamAtHome: competition.teamAtHome,
       teamOutside: competition.teamOutside
@@ -33,7 +33,7 @@ export class CompetitonService {
       throw new UnauthorizedException('This competition is already exists');
     }
 
-    return this.competitionRepository.save(competition);
+    return Competition.save(Competition.create([competition]));
   }
 
   async getInfo(competitionId: string) {
@@ -41,7 +41,7 @@ export class CompetitonService {
   }
 
   async updateCompetition(competitionId: string, competition: ICompetition) {
-    return this.competitionRepository.createQueryBuilder()
+    return Competition.createQueryBuilder()
       .update(Competition)
       .set({ ...competition })
       .where({ competitionId })
@@ -49,13 +49,14 @@ export class CompetitonService {
   }
 
   async deleteCompetition(competitionId: string) {
-    const deleteCompetition = await this.competitionRepository.delete({
+    const deleteCompetition = await Competition.delete({
       competitionId
     });
+
     return deleteCompetition.affected === 1;
   }
 
   async findOne(competitionId: string) {
-    return await this.competitionRepository.findOne({ competitionId });
+    return await Competition.findOne({ competitionId });
   }
 }

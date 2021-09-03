@@ -7,13 +7,13 @@ import { Repository } from 'typeorm';
 import { Competition } from '../../entities/Competition.entity';
 import { CompetitionModule } from '../competition.module';
 import { competitions } from '../../fixtures/competitions';
-import { CompetitonService } from '../competition.service';
+import { CompetitionService } from '../competition.service';
 import { Results } from '../../app-constants/enums';
 
 describe('Competition', () => {
   let app: INestApplication;
   let competitionRepository: Repository<Competition>;
-  let competitonService: CompetitonService;
+  let competitonService: CompetitionService;
 
   beforeAll(async () => {
     const module = await Test.createTestingModule({

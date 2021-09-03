@@ -17,7 +17,7 @@ export class BetController {
   constructor(private betService: BetService) {
   }
 
-    @Get()
+  @Get()
   async getInfo(@Query() query: IdDTO, @Res() res: Response) {
     const information = await this.betService.getInfo(query.betId);
 
@@ -26,21 +26,21 @@ export class BetController {
       res.status(HttpStatus.NOT_FOUND);
   }
 
-    @Delete()
-    async deleteBet(@Query() query: IdDTO, @Res() res: Response) {
-      const remove = await this.betService.deleteBet(query.betId);
+  @Delete()
+  async deleteBet(@Query() query: IdDTO, @Res() res: Response) {
+    const remove = await this.betService.deleteBet(query.betId);
 
-      return remove ?
-        res.status(HttpStatus.OK).json(remove) :
-        res.status(HttpStatus.NOT_FOUND).json(remove);
-    }
+    return remove ?
+      res.status(HttpStatus.OK).json(remove) :
+      res.status(HttpStatus.NOT_FOUND).json(remove);
+  }
 
-    @Post()
-    async registerBet(@Body() bet: BetDTO, @Res() res: Response) {
-      const register = await this.betService.registerBet(
-        bet
-      );
+  @Post()
+  async registerBet(@Body() bet: BetDTO, @Res() res: Response) {
+    const register = await this.betService.registerBet(
+      bet
+    );
 
-      return res.status(HttpStatus.OK).json(register);
-    }
+    return res.status(HttpStatus.OK).json(register);
+  }
 }

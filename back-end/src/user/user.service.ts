@@ -5,22 +5,9 @@ import {
   UnauthorizedException
 } from '@nestjs/common';
 import { InjectRepository } from '@nestjs/typeorm';
-import { Repository } from 'typeorm';
+import { Repository, UpdateResult } from 'typeorm';
 import { User } from '../entities/User.entity';
-
-interface IUser {
-  email: string;
-  countryCode: string;
-  password: string;
-}
-
-export interface IUserService {
-  registerUser(user: IUser): Promise<User>;
-  login(user: Partial<IUser>);
-  getInfo(email: string);
-  updateUser(user: IUser);
-  deleteUser(email: string);
-}
+import { IUser, IUserService } from './interface/user.interface';
 
 @Injectable()
 export class UserService implements IUserService {
@@ -29,13 +16,12 @@ export class UserService implements IUserService {
     private userRepository: Repository<User>
   ) {}
 
-  private hashPassword(password: string) {
+  static hashPassword(password: string): string {
     return crypto.createHash('md5').update(password).digest('hex');
   }
 
   async registerUser(user: IUser): Promise<User> {
-    console.log(user.email, 'userService')
-    const isRegistered = await this.userRepository.findOne({
+    const isRegistered = await User.findOne({
       email: user.email
     });
 
@@ -43,20 +29,21 @@ export class UserService implements IUserService {
       throw new UnauthorizedException('This user is already exists');
     }
 
-    const hash = this.hashPassword(user.password);
+    const hash = UserService.hashPassword(user.password);
 
-    return this.userRepository.save({
+    return User.save(User.create({
       ...user,
       password: hash
-    });
+    }));
   }
 
-  async login(user: Partial<IUser>) {
-    const userInDB = await this.findOne(user.email);
+  async login(user: Partial<IUser>)
+    : Promise<{ email: string, countryCode: string}> {
+    const userInDB = await User.findOne({ email: user.email });
 
     if (!userInDB) throw new UnauthorizedException('User was not found');
 
-    const hash = this.hashPassword(user.password);
+    const hash = UserService.hashPassword(user.password);
 
     if (userInDB.password !== hash) {
       throw new ForbiddenException('Password doesn\'t match');
@@ -68,9 +55,9 @@ export class UserService implements IUserService {
     };
   }
 
-  async getInfo(email: string) {
+  async getInfo(email: string): Promise<{ email: string, countryCode: string}> {
     try {
-      const user = await this.findOne(email);
+      const user = await User.findOne({ email });
 
       return {
         email: user.email,
@@ -82,10 +69,10 @@ export class UserService implements IUserService {
     }
   }
 
-  async updateUser(user: IUser) {
-    if (user.password) user.password = this.hashPassword(user.password);
+  async updateUser(user: IUser): Promise<UpdateResult> {
+    if (user.password) user.password = UserService.hashPassword(user.password);
 
-    return this.userRepository.createQueryBuilder()
+    return User.createQueryBuilder()
       .update(User)
       .set({
         countryCode: user.countryCode,
@@ -95,15 +82,37 @@ export class UserService implements IUserService {
       .execute();
   }
 
-  async deleteUser(email: string) {
-    const deleteUser = await this.userRepository.delete({ email });
+  async deleteUser(email: string): Promise<{
+    delete: boolean
+  }> {
+    const deleteUser = await User.delete({ email });
 
     return {
       delete: deleteUser.affected === 1
     };
   }
 
-  private async findOne(email: string) {
-    return await this.userRepository.findOne({ email });
+  async handleUsers(keys: string[], data: string[]): Promise<any> {
+    const user = {};
+
+    for (let i = 0; i < keys.length; i++) {
+      user[keys[i]] = data[i];
+    }
+    console.log(user, 'user');
+    const isRegistered = await User.findOne({ email: user['email'] });
+
+    if (isRegistered) {
+      return new UnauthorizedException('This user is already exists');
+    }
+
+    const hash = UserService.hashPassword(user['password']);
+
+    try {
+      await User.save(
+        User.create({ ...user, password: hash })
+      );
+    } catch (err) {
+      return err;
+    }
   }
 }

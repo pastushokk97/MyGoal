@@ -15,12 +15,11 @@ import {
   UpdateCompetitionDTO,
   IdDTO
 } from './dto/competition.dto';
-import { CompetitonService } from './competition.service';
-
+import { CompetitionService } from './competition.service';
 
 @Controller('competition')
 export class CompetitionController {
-  constructor(private competitionService: CompetitonService) {
+  constructor(private competitionService: CompetitionService) {
   }
 
   @Get()
@@ -45,9 +44,9 @@ export class CompetitionController {
 
   @Patch()
   async updateCompetition(
-      @Query() query: IdDTO,
-      @Body() competition: UpdateCompetitionDTO,
-      @Res() res: Response
+    @Query() query: IdDTO,
+    @Body() competition: UpdateCompetitionDTO,
+    @Res() res: Response
   ) {
     const { competitionId } = query;
     const updated = await this.competitionService.updateCompetition(

@@ -6,7 +6,7 @@
   "private": true,
   "scripts": {
     "build": "nest build",
-    "start:dev": "nest start --watch",
+    "start:dev": "nest start",
     "start:prod": "typeorm migration:run --config ormconfig && nest start --watch",
     "lint": "eslint \"src/**/*.ts\" --fix",
     "test": "jest",
