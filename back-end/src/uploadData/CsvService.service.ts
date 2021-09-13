@@ -1,14 +1,14 @@
 import { readFile } from 'fs';
 import { IData } from './interfaces/uploadData.interface';
 import { Injectable } from '@nestjs/common';
-import { inputFolder } from '../app-constants/uploadData';
+import { inputFolder, encoding } from '../app-constants/uploadData';
 
 @Injectable()
 export class CsvService implements IData {
   async saveData(file: string, process: any): Promise<any> {
     const errors = [];
     // return new Promise(((resolve, reject) => {
-    //   readFile(`${inputFolder}/${file}`, 'utf8', async (err, data: any) => {
+    //  readFile(`${inputFolder}/${file}`, encoding, async (err, data: any) => {
     //     const lines = data.split(/\r?\n/);
     //     const keys = lines[0].replace(/"/g,'').split(',');
     //     for (let i = 1; i < lines.length; i++) {
@@ -19,27 +19,50 @@ export class CsvService implements IData {
     //     resolve(errors);
     //   });
     // }));
+    return new Promise(((resolve, reject) => {
+      readFile(`${inputFolder}/${file}`, encoding, async (err, data: any) => {
+        try {
+          const lineArray = [];
+          let line = '';
+          let keys = '';
+          let count = 0;
+          for (let i = 0; i < data.length; i += 5) {
+            const chunk = data.slice(i, i + 5).split('\n');
 
-    readFile(`${inputFolder}/${file}`, 'utf8', async (err, data: any) => {
-      let str = '';
-      let strArray = [];
-      for (let i = 0; i < data.length; i += 5) {
-        const result = data.slice(i, i + 5).split('\n');
-        for (let j = 0; j < result.length; j++) {
-          if (j === result.length - 1) {
-            str += result[j];
-          } else {
-            str += result[j];
-            strArray.push(str);
-            str = '';
+            for (let j = 0; j < chunk.length; j++) {
+              if (j === chunk.length - 1) {
+                line += chunk[j];
+              } else {
+                line += chunk[j];
+                lineArray.push(line);
+                line = '';
+              }
+            }
+
+            if (count === 0 && lineArray[0]) {
+              keys = lineArray[0].replace(/"/g, '').split(',');
+              count++;
+            } else if (count > 0 && lineArray[count]) {
+              const formatData = lineArray[count].replace(/"/g, '').split(',');
+              const error = await process(keys, formatData);
+              if (error) errors.push(error);
+              count++;
+            }
           }
-        }
-        console.log(strArray[0]);
-      }
 
-      strArray.push(str);
-      console.log(strArray);
-    });
+          lineArray.push(line);
+          const formatData = lineArray[lineArray.length - 1]
+            .replace(/"/g, '')
+            .split(',');
+          const error = await process(keys, formatData);
+          if (error) errors.push(error);
+          resolve(errors);
+        } catch (err) {
+          console.log(err);
+          reject(err);
+        }
+      });
+    }));
   }
 
   getData(file: string, data: string): void {
